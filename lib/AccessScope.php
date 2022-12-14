@@ -31,6 +31,6 @@ class AccessScope extends ShopifyResource
      */
     public function generateUrl($urlParams = array(), $customAction = null)
     {
-        return ShopifySDK::$config['AdminUrl'] . 'oauth/' . $this->getResourcePath() . '.json';
+        return $this->config['AdminUrl'] . 'oauth/' . $this->getResourcePath() . '.json';
     }
 }
