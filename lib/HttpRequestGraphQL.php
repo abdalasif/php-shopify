@@ -64,12 +64,12 @@ class HttpRequestGraphQL extends HttpRequestJson
      *
      * @return string
      */
-    public static function post($url, $data, $httpHeaders = array(), $variables = null)
+    public static function post($config, $url, $data, $httpHeaders = array(), $variables = null)
     {
         self::prepareRequest($httpHeaders, $data, $variables);
 
         self::$postDataJSON = self::$postDataGraphQL;
 
-        return self::processRequest('POST', $url);
+        return self::processRequest($config, 'POST', $url);
     }
 }

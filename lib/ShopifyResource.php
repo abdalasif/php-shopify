@@ -136,11 +136,11 @@ abstract class ShopifyResource
      */
     private $prevLink = null;
 
-    public function __construct($id = null, $parentResourceUrl = '')
+    public function __construct($config, $id = null, $parentResourceUrl = '')
     {
         $this->id = $id;
 
-        $config = ShopifySDK::$config;
+        $this->config = $config;
 
         $this->resourceUrl = ($parentResourceUrl ? $parentResourceUrl . '/' :  $config['ApiUrl']) . $this->getResourcePath() . ($this->id ? '/' . $this->id : '');
 
@@ -209,8 +209,7 @@ abstract class ShopifyResource
             //If first argument is provided, it will be considered as the ID of the resource.
             $resourceID = !empty($arguments) ? $arguments[0] : null;
 
-
-            $api = new $childClass($resourceID, $this->resourceUrl);
+            $api = new $childClass($this->config, $resourceID, $this->resourceUrl);
 
             return $api;
         } else {
@@ -340,7 +339,7 @@ abstract class ShopifyResource
     {
         if (!$url) $url  = $this->generateUrl($urlParams);
 
-        $response = HttpRequestJson::get($url, $this->httpHeaders);
+        $response = HttpRequestJson::get($this->config, $url, $this->httpHeaders);
 
         if (!$dataKey) $dataKey = $this->id ? $this->resourceKey : $this->pluralizeKey();
 
@@ -414,7 +413,7 @@ abstract class ShopifyResource
 
         if ($wrapData && !empty($dataArray)) $dataArray = $this->wrapData($dataArray);
 
-        $response = HttpRequestJson::post($url, $dataArray, $this->httpHeaders);
+        $response = HttpRequestJson::post($this->config, $url, $dataArray, $this->httpHeaders);
 
         return $this->processResponse($response, $this->resourceKey);
     }
@@ -440,7 +439,7 @@ abstract class ShopifyResource
 
         if ($wrapData && !empty($dataArray)) $dataArray = $this->wrapData($dataArray);
 
-        $response = HttpRequestJson::put($url, $dataArray, $this->httpHeaders);
+        $response = HttpRequestJson::put($this->config, $url, $dataArray, $this->httpHeaders);
 
         return $this->processResponse($response, $this->resourceKey);
     }
@@ -462,7 +461,7 @@ abstract class ShopifyResource
     {
         if (!$url) $url = $this->generateUrl($urlParams);
 
-        $response = HttpRequestJson::delete($url, $this->httpHeaders);
+        $response = HttpRequestJson::delete($this->config, $url, $this->httpHeaders);
 
         return $this->processResponse($response);
     }

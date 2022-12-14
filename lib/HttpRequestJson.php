@@ -63,11 +63,11 @@ class HttpRequestJson
      *
      * @return array
      */
-    public static function get($url, $httpHeaders = array())
+    public static function get($config, $url, $httpHeaders = array())
     {
         self::prepareRequest($httpHeaders);
 
-        return self::processRequest('GET', $url);
+        return self::processRequest($config, 'GET', $url);
     }
 
     /**
@@ -79,11 +79,11 @@ class HttpRequestJson
      *
      * @return array
      */
-    public static function post($url, $dataArray, $httpHeaders = array())
+    public static function post($config, $url, $dataArray, $httpHeaders = array())
     {
         self::prepareRequest($httpHeaders, $dataArray);
 
-        return self::processRequest('POST', $url);
+        return self::processRequest($config, 'POST', $url);
     }
 
     /**
@@ -95,11 +95,11 @@ class HttpRequestJson
      *
      * @return array
      */
-    public static function put($url, $dataArray, $httpHeaders = array())
+    public static function put($config, $url, $dataArray, $httpHeaders = array())
     {
         self::prepareRequest($httpHeaders, $dataArray);
 
-        return self::processRequest('PUT', $url);
+        return self::processRequest($config, 'PUT', $url);
     }
 
     /**
@@ -110,11 +110,11 @@ class HttpRequestJson
      *
      * @return array
      */
-    public static function delete($url, $httpHeaders = array())
+    public static function delete($config, $url, $httpHeaders = array())
     {
         self::prepareRequest($httpHeaders);
 
-        return self::processRequest('DELETE', $url);
+        return self::processRequest($config, 'DELETE', $url);
     }
 
     /**
@@ -127,7 +127,7 @@ class HttpRequestJson
      *
      * @return array
      */
-    public static function processRequest($method, $url) {
+    public static function processRequest($config, $method, $url) {
         $retry = 0;
         $raw = null;
 
@@ -152,7 +152,7 @@ class HttpRequestJson
 
                 return self::processResponse($raw);
             } catch(\Exception $e) {
-                if (!self::shouldRetry($raw, $e, $retry++)) {
+                if (!self::shouldRetry($config, $raw, $e, $retry++)) {
                     throw $e;
                 }
             }
@@ -168,9 +168,7 @@ class HttpRequestJson
      *
      * @return bool
      */
-    public static function shouldRetry($response, $error, $retry) {
-        $config = ShopifySDK::$config;
-
+    public static function shouldRetry($config, $response, $error, $retry) {
         if (isset($config['RequestRetryCallback'])) {
            return $config['RequestRetryCallback']($response, $error, $retry);
         }

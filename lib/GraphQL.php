@@ -44,7 +44,7 @@ class GraphQL extends ShopifyResource
     {
         if (!$url) $url = $this->generateUrl();
 
-        $response = HttpRequestGraphQL::post($url, $graphQL, $this->httpHeaders, $variables);
+        $response = HttpRequestGraphQL::post($this->config, $url, $graphQL, $this->httpHeaders, $variables);
 
         return $this->processResponse($response);
     }
