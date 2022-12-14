@@ -1,8 +1,8 @@
 {
-    "name": "phpclassic/php-shopify",
-    "description": "PHP SDK for Shopify API",
+    "name": "abdalasif/php-shopify",
+    "description": "PHP SDK for Shopify API with multiple store config",
     "keywords": ["PHP","Shopify","SDK"],
-    "homepage": "https://github.com/phpclassic/php-shopify",
+    "homepage": "https://github.com/abdalasif/php-shopify",
     "type": "library",
     "require": {
         "php": ">=5.6",
