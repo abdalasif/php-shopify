@@ -7,7 +7,9 @@
 
 namespace PHPShopify;
 
-class TestResource extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class TestResource extends TestCase
 {
     /**
      * @var ShopifySDK $shopify;
@@ -17,13 +19,13 @@ class TestResource extends \PHPUnit_Framework_TestCase
     /**
      * @inheritDoc
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $config = array(
             'ShopUrl' => getenv('SHOPIFY_SHOP_URL'), //Your shop URL
             'ApiKey' => getenv('SHOPIFY_API_KEY'), //Your Private API Key
             'Password' => getenv('SHOPIFY_API_PASSWORD'), //Your Private API Password
-            'AccessToken' => getenv('SHOPIFY_API_PASSWORD'), //Your Access Token(Private API Password)
+            'AccessToken' => getenv('SHOPIFY_ACCESS_TOKEN'), //Your Access Token(Private API Password)
         );
 
         self::$shopify = new ShopifySDK($config);
@@ -33,7 +35,7 @@ class TestResource extends \PHPUnit_Framework_TestCase
     /**
      * @inheritDoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$shopify = null;
     }

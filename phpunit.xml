@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit bootstrap="vendor/autoload.php" colors="true">
-    <testsuites>
-        <testsuite name="PHPShopify Test Suite">
-            <directory>./tests/</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory suffix=".php">lib/</directory>
-        </whitelist>
-    </filter>
-
-    <php>
-        <ini name="date.timezone" value="UTC"/>
-    </php>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory suffix=".php">lib/</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="PHPShopify Test Suite">
+      <directory>./tests/</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <ini name="date.timezone" value="UTC"/>
+    <env name="SHOPIFY_SHOP_URL" value="" />
+    <env name="SHOPIFY_ACCESS_TOKEN" value="" />
+  </php>
 </phpunit>
