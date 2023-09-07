@@ -163,17 +163,39 @@ class HttpRequestJson
      * Evaluate if send again a request
      *
      * @param string $response Raw request response
-     * @param exception $error the request error occured
+     * @param \Exception $error the request error occured
      * @param integer $retry the current number of retry
      *
      * @return bool
      */
     public static function shouldRetry($config, $response, $error, $retry) {
-        if (isset($config['RequestRetryCallback'])) {
-           return $config['RequestRetryCallback']($response, $error, $retry);
+        if (!isset($config['RequestRetryCallback'])) {
+            return false;
         }
 
-        return false;
+        if($config['RequestRetryCallback'] instanceof \Closure) {
+            return $config['RequestRetryCallback']($response, $error, $retry);
+        }
+
+        $class = '';
+        $method = '';
+
+        if(is_array($config['RequestRetryCallback'])) {
+            $class = (string) @$config['RequestRetryCallback'][0];
+            $method = (string) @$config['RequestRetryCallback'][1];
+        }
+
+        if(false === class_exists($class) || false === method_exists($class, $method)) {
+            return false;
+        }
+
+        try {
+            $closure = $class::$method();
+
+            return $closure($response, $error, $retry);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
